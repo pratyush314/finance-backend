@@ -114,7 +114,6 @@ export class UserService {
       throw ApiError.notFound('User not found');
     }
 
-    // Check email uniqueness if email is being updated
     if (data.email && data.email !== user.email) {
       const existingUser = await User.findOne({ email: data.email });
 

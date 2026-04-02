@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FinancialRecord } from '../models/FinancialRecord.js';
 import { isValidDateString, getStartOfDay, getEndOfDay } from '../utils/dateHelpers.js';
 import { ApiError } from '../utils/apiError.js';

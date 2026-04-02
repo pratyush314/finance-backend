@@ -10,6 +10,12 @@ import {
   recordIdSchema,
   listRecordsSchema,
 } from '../validators/record.validator.js';
+import {
+  createRecordRateLimiter,
+  listRecordsRateLimiter,
+  updateRecordRateLimiter,
+  deleteRecordRateLimiter,
+} from '../middlewares/rateLimiter.middleware.js';
 
 const router = Router();
 
@@ -17,6 +23,7 @@ router.use(authMiddleware, requireActiveUserMiddleware);
 
 router.post(
   '/',
+  createRecordRateLimiter,
   authorize('ADMIN', 'ANALYST'),
   validate(createRecordSchema),
   (req, res, next) => {
@@ -26,6 +33,7 @@ router.post(
 
 router.get(
   '/',
+  listRecordsRateLimiter,
   authorize('ADMIN', 'ANALYST'),
   validate(listRecordsSchema, 'query'),
   (req, res, next) => {
@@ -44,6 +52,7 @@ router.get(
 
 router.patch(
   '/:id',
+  updateRecordRateLimiter,
   authorize('ADMIN'),
   validate(recordIdSchema, 'params'),
   validate(updateRecordSchema),
@@ -54,6 +63,7 @@ router.patch(
 
 router.delete(
   '/:id',
+  deleteRecordRateLimiter,
   authorize('ADMIN'),
   validate(recordIdSchema, 'params'),
   (req, res, next) => {

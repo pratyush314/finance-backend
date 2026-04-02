@@ -1,15 +1,28 @@
 import { createApp } from './app.js';
 import { env, validateEnv } from './config/env.js';
 import { connectDB, disconnectDB } from './lib/mongodb.js';
+import {
+  initializeAllRateLimiters,
+  disconnectRedis,
+} from './middlewares/rateLimiter.middleware.js';
 
 async function main() {
   validateEnv();
 
   try {
     await connectDB();
+    console.log('✅ MongoDB connected');
   } catch (error) {
     console.error('❌ Failed to connect to MongoDB:', error);
     process.exit(1);
+  }
+
+  try {
+    await initializeAllRateLimiters();
+    console.log('✅ Redis initialized for rate limiting');
+  } catch (error) {
+    console.error('❌ Failed to initialize Redis:', error);
+    console.warn('⚠️ Continuing with in-memory rate limiting');
   }
 
   const app = createApp();
@@ -25,6 +38,7 @@ async function main() {
     server.close(async () => {
       console.log('HTTP server closed');
       await disconnectDB();
+      await disconnectRedis();
       process.exit(0);
     });
   });
@@ -34,6 +48,7 @@ async function main() {
     server.close(async () => {
       console.log('HTTP server closed');
       await disconnectDB();
+      await disconnectRedis();
       process.exit(0);
     });
   });

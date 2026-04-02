@@ -10,6 +10,10 @@ import {
   dashboardMonthlyTrendsSchema,
   dashboardRecentActivitySchema,
 } from '../validators/dashboard.validator.js';
+import {
+  dashboardRateLimiter,
+  dashboardExpensiveRateLimiter,
+} from '../middlewares/rateLimiter.middleware.js';
 
 const router = Router();
 
@@ -17,6 +21,7 @@ router.use(authMiddleware, requireActiveUserMiddleware);
 
 router.get(
   '/overview',
+  dashboardRateLimiter,
   authorize('ANALYST', 'ADMIN', 'VIEWER'),
   validate(dashboardOverviewSchema, 'query'),
   (req, res, next) => {
@@ -26,6 +31,7 @@ router.get(
 
 router.get(
   '/category-breakdown',
+  dashboardExpensiveRateLimiter,
   authorize('ANALYST', 'ADMIN', 'VIEWER'),
   validate(dashboardCategorySchema, 'query'),
   (req, res, next) => {
@@ -35,6 +41,7 @@ router.get(
 
 router.get(
   '/recent-activity',
+  dashboardRateLimiter,
   authorize('ANALYST', 'ADMIN', 'VIEWER'),
   validate(dashboardRecentActivitySchema, 'query'),
   (req, res, next) => {
@@ -44,6 +51,7 @@ router.get(
 
 router.get(
   '/monthly-trends',
+  dashboardExpensiveRateLimiter,
   authorize('ANALYST', 'ADMIN', 'VIEWER'),
   validate(dashboardMonthlyTrendsSchema, 'query'),
   (req, res, next) => {

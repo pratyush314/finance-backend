@@ -10,6 +10,12 @@ export const env = {
   jwtExpiry: process.env.JWT_EXPIRY ?? '7d',
   isDevelopment: (process.env.NODE_ENV ?? 'development') === 'development',
   isProduction: process.env.NODE_ENV === 'production',
+  redis: {
+    host: process.env.REDIS_HOST ?? 'localhost',
+    port: parseInt(process.env.REDIS_PORT ?? '6379', 10),
+    password: process.env.REDIS_PASSWORD,
+    db: parseInt(process.env.REDIS_DB ?? '0', 10),
+  },
 };
 
 export function validateEnv() {
@@ -18,5 +24,11 @@ export function validateEnv() {
 
   if (missing.length > 0) {
     console.warn(`Warning: Missing environment variables: ${missing.join(', ')}`);
+  }
+
+  if (env.isProduction && !process.env.REDIS_HOST) {
+    console.warn(
+      'Warning: REDIS_HOST not set. Rate limiting will use in-memory store and will NOT work across multiple processes.'
+    );
   }
 }

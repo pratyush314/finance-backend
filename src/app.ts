@@ -8,6 +8,7 @@ import dashboardRoutes from './routes/dashboard.routes.js';
 
 import { notFoundMiddleware } from './middlewares/notFound.middleware.js';
 import { errorHandlerMiddleware } from './middlewares/errorHandler.middleware.js';
+import { globalRateLimiter } from './middlewares/rateLimiter.middleware.js';
 
 export function createApp(): Express {
   const app = express();
@@ -23,6 +24,8 @@ export function createApp(): Express {
   app.get('/health', (req: Request, res: Response) => {
     res.json({ status: 'healthy', timestamp: new Date().toISOString() });
   });
+
+  app.use('/api/', globalRateLimiter);
 
   app.use('/api/auth', authRoutes);
   app.use('/api/users', userRoutes);

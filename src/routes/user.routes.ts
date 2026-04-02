@@ -12,14 +12,26 @@ import {
   userIdSchema,
   listUsersSchema,
 } from '../validators/user.validator.js';
+import {
+  createUserRateLimiter,
+  updateUserRateLimiter,
+  statusChangeRateLimiter,
+  deleteUserRateLimiter,
+} from '../middlewares/rateLimiter.middleware.js';
 
 const router = Router();
 
 router.use(authMiddleware, requireActiveUserMiddleware);
 
-router.post('/', authorize('ADMIN'), validate(createUserSchema), (req, res, next) => {
-  userController.createUser(req, res, next);
-});
+router.post(
+  '/',
+  createUserRateLimiter,
+  authorize('ADMIN'),
+  validate(createUserSchema),
+  (req, res, next) => {
+    userController.createUser(req, res, next);
+  }
+);
 
 router.get(
   '/',
@@ -41,6 +53,7 @@ router.get(
 
 router.patch(
   '/:id',
+  updateUserRateLimiter,
   authorize('ADMIN'),
   validate(userIdSchema, 'params'),
   validate(updateUserSchema),
@@ -61,6 +74,7 @@ router.patch(
 
 router.patch(
   '/:id/status',
+  statusChangeRateLimiter,
   authorize('ADMIN'),
   validate(userIdSchema, 'params'),
   validate(updateUserStatusSchema),
@@ -71,6 +85,7 @@ router.patch(
 
 router.delete(
   '/:id',
+  deleteUserRateLimiter,
   authorize('ADMIN'),
   validate(userIdSchema, 'params'),
   (req, res, next) => {

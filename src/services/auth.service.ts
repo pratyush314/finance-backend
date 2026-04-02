@@ -5,7 +5,6 @@ import { ApiError } from '../utils/apiError.js';
 
 export class AuthService {
   async login(email: string, password: string) {
-    console.log(email, password);
     const user = await User.findOne({ email }).select('+passwordHash');
 
     if (!user) {

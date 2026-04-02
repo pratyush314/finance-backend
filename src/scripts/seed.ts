@@ -52,7 +52,6 @@ async function seed() {
 
     console.log('💰 Creating financial records...');
     const recordsData = [
-      // Income records
       {
         amount: 5000,
         type: 'INCOME',
@@ -101,7 +100,6 @@ async function seed() {
         notes: 'Monthly salary',
         createdBy: adminUser._id,
       },
-      // Expense records
       {
         amount: 1200,
         type: 'EXPENSE',
