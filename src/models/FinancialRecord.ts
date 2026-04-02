@@ -8,6 +8,7 @@ interface IFinancialRecord extends Document {
   notes?: string;
   createdBy: mongoose.Types.ObjectId;
   createdAt: Date;
+  isDeleted: boolean;
   updatedAt: Date;
 }
 
@@ -28,6 +29,10 @@ const financialRecordSchema = new Schema<IFinancialRecord>(
       required: [true, 'Category is required'],
       trim: true,
       maxlength: [50, 'Category cannot exceed 50 characters'],
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
     },
     date: {
       type: Date,

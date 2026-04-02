@@ -24,7 +24,7 @@ export function validate(
       if (location === 'body') {
         req.body = result.data;
       } else if (location === 'query') {
-        req.query = result.data as Record<string, unknown>;
+        req.query = result.data;
       } else {
         req.params = result.data as Record<string, string>;
       }

@@ -50,6 +50,12 @@ export class RecordService {
       throw ApiError.badRequest('Invalid record ID');
     }
 
+    const isDeleted = await this.isRecordDeleted(recordId);
+
+    if (isDeleted) {
+      throw ApiError.badRequest('Invalid Record');
+    }
+
     const record = await FinancialRecord.findById(recordId).populate(
       'createdBy',
       'name email'
@@ -81,19 +87,16 @@ export class RecordService {
   async listRecords(query: ListRecordsQuery & PaginationOptions) {
     const { page, limit, skip, sortBy, sortOrder } = parsePagination(query);
 
-    const filter: Record<string, unknown> = {};
+    const filter: Record<string, unknown> = { isDeleted: false };
 
-    // Filter by type
     if (query.type) {
       filter.type = query.type;
     }
 
-    // Filter by category
     if (query.category) {
       filter.category = { $regex: query.category, $options: 'i' };
     }
 
-    // Filter by date range
     if (query.from || query.to) {
       filter.date = {};
 
@@ -151,6 +154,12 @@ export class RecordService {
       throw ApiError.badRequest('Invalid record ID');
     }
 
+    const isDeleted = await this.isRecordDeleted(recordId);
+
+    if (isDeleted) {
+      throw ApiError.badRequest('Invalid Record');
+    }
+
     const record = await FinancialRecord.findById(recordId);
 
     if (!record) {
@@ -182,14 +191,24 @@ export class RecordService {
     if (!isValidObjectId(recordId)) {
       throw ApiError.badRequest('Invalid record ID');
     }
-
-    const record = await FinancialRecord.findByIdAndDelete(recordId);
-
-    if (!record) {
-      throw ApiError.notFound('Record not found');
+    const isDeleted = await this.isRecordDeleted(recordId);
+    if (isDeleted) {
+      throw ApiError.notFound('Record not found !');
     }
 
+    await FinancialRecord.findByIdAndUpdate(recordId, {
+      isDeleted: true,
+    });
+
     return { message: 'Record deleted successfully' };
+  }
+
+  async isRecordDeleted(recordId: string) {
+    const record = await FinancialRecord.findOne({ _id: recordId });
+
+    if (!record) return false;
+
+    return record.isDeleted;
   }
 }
 

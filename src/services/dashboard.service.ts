@@ -41,7 +41,7 @@ export interface MonthlyTrend {
 
 export class DashboardService {
   async getOverview(from?: string, to?: string): Promise<DashboardOverview> {
-    const filter: Record<string, unknown> = {};
+    const filter: Record<string, unknown> = { isDeleted: false };
 
     if (from || to) {
       filter.date = {};
@@ -84,7 +84,7 @@ export class DashboardService {
     to?: string,
     type?: string
   ): Promise<CategoryBreakdown[]> {
-    const filter: Record<string, unknown> = {};
+    const filter: Record<string, unknown> = { isDeleted: false };
 
     if (type) {
       filter.type = type;
@@ -142,7 +142,7 @@ export class DashboardService {
   }
 
   async getRecentActivity(limit: number = 10): Promise<RecentActivity[]> {
-    const records = await FinancialRecord.find()
+    const records = await FinancialRecord.find({ isDeleted: false })
       .populate('createdBy', 'name email')
       .sort({ createdAt: -1 })
       .limit(limit)
@@ -169,6 +169,7 @@ export class DashboardService {
 
     const records = await FinancialRecord.find({
       date: { $gte: startDate },
+      isDeleted: false,
     })
       .select('amount type date')
       .sort({ date: 1 })

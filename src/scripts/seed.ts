@@ -67,7 +67,7 @@ async function seed() {
         category: 'Freelance',
         date: new Date('2024-01-20'),
         notes: 'Freelance project payment',
-        createdBy: analystUser._id,
+        createdBy: adminUser._id,
       },
       {
         amount: 500,
@@ -91,7 +91,7 @@ async function seed() {
         category: 'Freelance',
         date: new Date('2024-02-18'),
         notes: 'Contract work',
-        createdBy: analystUser._id,
+        createdBy: adminUser._id,
       },
       {
         amount: 5000,
@@ -116,7 +116,7 @@ async function seed() {
         category: 'Utilities',
         date: new Date('2024-01-05'),
         notes: 'Electricity and water bills',
-        createdBy: analystUser._id,
+        createdBy: adminUser._id,
       },
       {
         amount: 150,
@@ -132,7 +132,7 @@ async function seed() {
         category: 'Transportation',
         date: new Date('2024-01-12'),
         notes: 'Gas',
-        createdBy: analystUser._id,
+        createdBy: adminUser._id,
       },
       {
         amount: 50,
@@ -156,7 +156,7 @@ async function seed() {
         category: 'Groceries',
         date: new Date('2024-02-05'),
         notes: 'Weekly groceries',
-        createdBy: analystUser._id,
+        createdBy: adminUser._id,
       },
       {
         amount: 100,
@@ -172,7 +172,7 @@ async function seed() {
         category: 'Utilities',
         date: new Date('2024-02-08'),
         notes: 'Utilities',
-        createdBy: analystUser._id,
+        createdBy: adminUser._id,
       },
       {
         amount: 200,
@@ -196,7 +196,7 @@ async function seed() {
         category: 'Transportation',
         date: new Date('2024-03-05'),
         notes: 'Gas',
-        createdBy: analystUser._id,
+        createdBy: adminUser._id,
       },
       {
         amount: 120,
