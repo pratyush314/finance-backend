@@ -19,7 +19,7 @@ This is a backend internship assignment project that demonstrates core backend e
 - **Framework:** Express.js (Node.js)
 - **Language:** TypeScript
 - **ODM:** Mongoose
-- **Database:** MongoDB
+- **Databases:** MongoDB, Redis
 - **Authentication:** JWT (jsonwebtoken)
 - **Password Hashing:** bcrypt
 - **Validation:** Zod
@@ -32,6 +32,7 @@ This is a backend internship assignment project that demonstrates core backend e
 | ---------------------- | ---------------------------------------------------------------------- |
 | **Express.js**         | Lightweight, widely-used, great for learning REST API fundamentals     |
 | **Mongoose + MongoDB** | Flexible schema, excellent Node.js integration, document-oriented data |
+| **Redis**              | High availability, in-memory key-value store, good for rate limiting   |
 | **TypeScript**         | Catches errors at compile-time, makes code self-documenting            |
 | **JWT**                | Stateless auth, industry-standard, suitable for dashboards             |
 | **bcrypt**             | Secure password hashing with salt, industry-standard                   |
@@ -501,7 +502,6 @@ For production deployment:
 - [ ] Swagger/OpenAPI documentation
 - [ ] Postman collection
 - [ ] Password reset flow
-- [ ] Soft delete for records
 - [ ] Search functionality
 - [ ] Export to CSV/PDF
 - [ ] Recurring transactions

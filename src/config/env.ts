@@ -12,6 +12,7 @@ export const env = {
   isProduction: process.env.NODE_ENV === 'production',
   redis: {
     host: process.env.REDIS_HOST ?? 'localhost',
+    url: process.env.REDIS_URL ?? '',
     port: parseInt(process.env.REDIS_PORT ?? '6379', 10),
     password: process.env.REDIS_PASSWORD,
     db: parseInt(process.env.REDIS_DB ?? '0', 10),
@@ -26,9 +27,9 @@ export function validateEnv() {
     console.warn(`Warning: Missing environment variables: ${missing.join(', ')}`);
   }
 
-  if (env.isProduction && !process.env.REDIS_HOST) {
+  if (env.isProduction && !process.env.REDIS_URL) {
     console.warn(
-      'Warning: REDIS_HOST not set. Rate limiting will use in-memory store and will NOT work across multiple processes.'
+      'Warning: REDIS_URL not set. Rate limiting will use in-memory store and will NOT work across multiple processes.'
     );
   }
 }

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import RedisStore from 'rate-limit-redis';
-import { createClient } from 'redis';
-import { env } from '../config/env.js';
+import { createClient, type RedisClientType } from 'redis';
+import getRedisConfig from '../config/redis.config';
 
-let redisClient: ReturnType<typeof createClient> | null = null;
+let redisClient: RedisClientType | null = null;
 let isRedisConnected = false;
 
 export async function initializeRedis() {
@@ -12,18 +12,12 @@ export async function initializeRedis() {
   }
 
   try {
-    redisClient = createClient({
-      socket: {
-        host: env.redis.host,
-        port: env.redis.port,
-      },
-      password: env.redis.password || undefined,
-    });
+    redisClient = createClient(getRedisConfig());
 
     redisClient.on('error', (error) => {
       console.error('❌ Redis error:', error);
       isRedisConnected = false;
-      console.warn('⚠️  Redis disconnected - rate limiting may not persist');
+      console.warn('⚠️ Redis disconnected - rate limiting may not persist');
     });
 
     redisClient.on('connect', () => {
@@ -31,34 +25,34 @@ export async function initializeRedis() {
       isRedisConnected = true;
     });
 
+    redisClient.on('end', () => {
+      isRedisConnected = false;
+      console.warn('⚠️ Redis connection closed');
+    });
+
     await redisClient.connect();
 
-    if (env.redis.db && env.redis.db !== 0) {
-      await redisClient.select(env.redis.db);
-    }
-
     isRedisConnected = true;
-
     return redisClient;
   } catch (error) {
     console.error('❌ Failed to initialize Redis:', error);
     console.warn(
-      '⚠️  Rate limiting will use in-memory store (NOT recommended for production)'
+      '⚠️ Rate limiting will use in-memory store (NOT recommended for production)'
     );
+    redisClient = null;
     isRedisConnected = false;
     return null;
   }
 }
 
-export function getRedisStore(prefix: string): any {
+export function getRedisStore(prefix: string) {
   if (isRedisConnected && redisClient) {
     return new (RedisStore as any)({
-      sendCommand: async (...args: string[]) => {
-        return (redisClient as any).sendCommand(args);
-      },
+      sendCommand: (...args: string[]) => redisClient!.sendCommand(args),
       prefix,
     });
   }
+
   return undefined;
 }
 
@@ -71,9 +65,11 @@ export async function disconnectRedis() {
     try {
       await redisClient.disconnect();
       console.log('✅ Redis disconnected');
-      isRedisConnected = false;
     } catch (error) {
       console.error('❌ Error disconnecting Redis:', error);
+    } finally {
+      redisClient = null;
+      isRedisConnected = false;
     }
   }
 }
