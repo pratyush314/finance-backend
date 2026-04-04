@@ -1,4 +1,4 @@
-import { env } from '../config/env';
+import { env } from '../config/env.js';
 
 function getRedisConfig() {
   const isProduction = env.nodeEnv === 'production';

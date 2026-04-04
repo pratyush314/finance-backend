@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { User } from '../models/User.js';
 import { env } from '../config/env.js';
 import { ApiError } from '../utils/apiError.js';
@@ -25,7 +25,7 @@ export class AuthService {
         status: user.status,
       },
       env.jwtSecret,
-      { expiresIn: env.jwtExpiry }
+      { expiresIn: env.jwtExpiry as SignOptions['expiresIn'] }
     );
 
     return {

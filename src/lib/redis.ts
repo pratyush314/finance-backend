@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import RedisStore from 'rate-limit-redis';
 import { createClient, type RedisClientType } from 'redis';
-import getRedisConfig from '../config/redis.config';
+import getRedisConfig from '../config/redis.config.js';
 
 let redisClient: RedisClientType | null = null;
 let isRedisConnected = false;
