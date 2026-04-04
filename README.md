@@ -2,6 +2,20 @@
 
 A production-style finance dashboard API built with Express.js, Mongoose ODM, and MongoDB. Features role-based access control, JWT authentication, financial record management, and comprehensive dashboard analytics endpoints.
 
+**Live API:** `https://finance-backend-gtv7.onrender.com`  
+**Health Check:** `https://finance-backend-gtv7.onrender.com/health`  
+**Postman Files:** `postman/finance-backend-collection.json` & `postman/finance-backend-environment.json`
+
+## 🎯 Quick Test (30 seconds)
+
+### 1. Health Check
+
+```bash
+curl https://finance-backend-gtv7.onrender.com/health
+```
+
+### 2. Postman (Recommended)
+
 ## 🎯 Purpose
 
 This is a backend internship assignment project that demonstrates core backend engineering concepts:
